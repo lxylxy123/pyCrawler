@@ -1,11 +1,11 @@
 from bs4 import BeautifulSoup
 from urllib import request
 
-# 获取知乎答案的数据
-def zhihuAn(url):
 
+# 获取知乎某一条答案的数据
+def zhihuAn(url):
     # 伪造一个代理浏览器(windows的chrome浏览器)
-    headerList = {"User-Agent":"Mozilla/5.0(WindowsNT6.1;rv:2.0.1)Gecko/20100101Firefox/4.0.1"}
+    headerList = {"User-Agent": "Mozilla/5.0(WindowsNT6.1;rv:2.0.1)Gecko/20100101Firefox/4.0.1"}
 
     # 构建一个请求
     req = request.Request(url, headers=headerList)
@@ -26,23 +26,24 @@ def zhihuAn(url):
     for an in anList:
         print(an.get_text())
 
+# 获取知乎推荐中所有的答案
+def zhihuQuestions():
+    questionUrl = "https://www.zhihu.com/explore/recommendations"
 
+    headerList = {"User-Agent": "Mozilla/5.0(WindowsNT6.1;rv:2.0.1)Gecko/20100101Firefox/4.0.1"}
 
-questionUrl = "https://www.zhihu.com/explore/recommendations"
+    req = request.Request(questionUrl, headers=headerList)
 
-req = request.Request(questionUrl, headers={"User-Agent":"Mozilla/5.0(WindowsNT6.1;rv:2.0.1)Gecko/20100101Firefox/4.0.1"})
+    result = request.urlopen(req).read()
 
-result = request.urlopen(req).read()
+    soup = BeautifulSoup(result, "html5lib")
 
-soup = BeautifulSoup(result,"html5lib")
+    quList = soup.select(".question_link")
 
-quList = soup.select(".question_link")
+    for qu in quList:
+        zhUrl = "https://www.zhihu.com" + qu.attrs['href']
+        print(zhUrl)
+        zhihuAn(zhUrl)
 
-for qu in quList:
-    zhUrl = "https://www.zhihu.com" + qu.attrs['href']
-    print(zhUrl)
-    zhihuAn(zhUrl)
-
-
-
-
+# 调用函数
+zhihuQuestions()
