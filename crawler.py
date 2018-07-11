@@ -26,6 +26,7 @@ def zhihuAn(url):
     for an in anList:
         print(an.get_text())
 
+
 # 获取知乎推荐中所有的答案
 def zhihuQuestions():
     questionUrl = "https://www.zhihu.com/explore/recommendations"
@@ -44,6 +45,7 @@ def zhihuQuestions():
         zhUrl = "https://www.zhihu.com" + qu.attrs['href']
         print(zhUrl)
         zhihuAn(zhUrl)
+
 
 # 调用函数
 zhihuQuestions()
